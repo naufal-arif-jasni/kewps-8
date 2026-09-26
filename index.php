@@ -49,7 +49,7 @@ $departments = [
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistem Pengurusan Stok KEW.PS-8 | Pejabat KDYMM Tuanku Sultan Kedah</title>
+  <title>Sistem Pengurusan Stok KEW.PS-8</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -77,15 +77,11 @@ $departments = [
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-widest text-amber-400">SISTEM STOR KEW.PS-8</span>
-              <span class="bg-amber-500/20 text-amber-300 text-[10px] font-mono px-2 py-0.5 rounded border border-amber-500/30">PHP NATIVE</span>
+              <span class="text-xs font-bold uppercase tracking-widest text-amber-400">PEJABAT KDYMM TUANKU SULTAN KEDAH </span>
             </div>
             <h1 class="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
-              PEJABAT KDYMM TUANKU SULTAN KEDAH
+              SISTEM PENGURUSAN STOR 
             </h1>
-            <p class="text-[11px] text-slate-300 hidden sm:block">
-              Pangkalan Data MySQL: <code class="text-amber-400 font-mono font-bold">senarai data stok pejabat</code>
-            </p>
           </div>
         </div>
 
@@ -292,6 +288,57 @@ $departments = [
           </div>
         <?php endforeach; ?>
       </div>
+
+      <!-- Bahagian Pagination 50 Item (Katalog Stok) -->
+      <div id="catalogPagination" class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs mt-6">
+        <div class="text-slate-600 font-medium">
+          Halaman <span id="catalogCurrentPage" class="font-bold text-slate-900">1</span> daripada <span id="catalogTotalPages" class="font-bold text-slate-900">1</span> 
+          (<span id="catalogItemRange" class="text-slate-500 font-normal">Memaparkan 1 - 50</span> daripada <span id="catalogTotalCount" class="font-bold text-slate-900"><?= count($items) ?></span> item)
+        </div>
+
+        <div class="flex items-center gap-1" id="catalogPaginationControls">
+          <!-- Butang Halaman Pertama & Sebelum -->
+          <button 
+            type="button" 
+            id="btnFirstPage" 
+            onclick="goToCatalogPage(1)" 
+            title="Halaman Pertama" 
+            class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+          >
+            &laquo;
+          </button>
+          <button 
+            type="button" 
+            id="btnPrevPage" 
+            onclick="changeCatalogPage(-1)" 
+            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+          >
+            Sebelum
+          </button>
+
+          <!-- Nombor Halaman Dinamik -->
+          <div id="catalogPageNumbers" class="flex items-center gap-1"></div>
+
+          <!-- Butang Seterusnya & Halaman Terakhir -->
+          <button 
+            type="button" 
+            id="btnNextPage" 
+            onclick="changeCatalogPage(1)" 
+            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+          >
+            Seterusnya
+          </button>
+          <button 
+            type="button" 
+            id="btnLastPage" 
+            onclick="goToCatalogPage(catalogTotalPagesCount)" 
+            title="Halaman Terakhir" 
+            class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+          >
+            &raquo;
+          </button>
+        </div>
+      </div>
     <?php endif; ?>
 
   </main>
@@ -469,9 +516,16 @@ $departments = [
     let currentCategory = 'Semua';
     let currentStockFilter = 'all';
 
-    // Inisialisasi ikon Lucide
+    // Konfigurasi Pagination Katalog Stok (50 item setiap halaman)
+    const CATALOG_ITEMS_PER_PAGE = 50;
+    let catalogCurrentPage = 1;
+    let catalogTotalPagesCount = 1;
+    let matchingCards = [];
+
+    // Inisialisasi ikon Lucide & Pagination
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+      filterItems();
     });
 
     function toggleCartDrawer() {
@@ -608,17 +662,23 @@ $departments = [
       filterItems();
     }
 
-    function filterItems() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
+    function filterItems(resetPage = true) {
+      if (resetPage) {
+        catalogCurrentPage = 1;
+      }
+
+      const searchInputEl = document.getElementById('searchInput');
+      const query = searchInputEl ? searchInputEl.value.toLowerCase().trim() : '';
       const cards = document.querySelectorAll('.item-card');
 
+      matchingCards = [];
       cards.forEach(card => {
-        const name = card.getAttribute('data-name');
-        const code = card.getAttribute('data-code');
-        const cat = card.getAttribute('data-category');
-        const stock = parseInt(card.getAttribute('data-stock'), 10);
+        const name = card.getAttribute('data-name') || '';
+        const code = card.getAttribute('data-code') || '';
+        const cat = card.getAttribute('data-category') || '';
+        const stock = parseInt(card.getAttribute('data-stock'), 10) || 0;
 
-        const matchSearch = name.includes(query) || code.includes(query);
+        const matchSearch = query === '' || name.includes(query) || code.includes(query);
         const matchCat = currentCategory === 'Semua' || cat === currentCategory;
         const matchStock = currentStockFilter === 'all' 
           ? true 
@@ -627,11 +687,109 @@ $departments = [
           : stock === 0;
 
         if (matchSearch && matchCat && matchStock) {
+          matchingCards.push(card);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      renderCatalogPagination();
+    }
+
+    function renderCatalogPagination() {
+      const totalCount = matchingCards.length;
+      catalogTotalPagesCount = Math.max(1, Math.ceil(totalCount / CATALOG_ITEMS_PER_PAGE));
+      if (catalogCurrentPage > catalogTotalPagesCount) {
+        catalogCurrentPage = catalogTotalPagesCount;
+      }
+      if (catalogCurrentPage < 1) {
+        catalogCurrentPage = 1;
+      }
+
+      const paginationContainer = document.getElementById('catalogPagination');
+      if (!paginationContainer) return;
+
+      if (totalCount === 0) {
+        paginationContainer.classList.add('hidden');
+        return;
+      } else {
+        paginationContainer.classList.remove('hidden');
+      }
+
+      const startIndex = (catalogCurrentPage - 1) * CATALOG_ITEMS_PER_PAGE;
+      const endIndex = Math.min(totalCount, startIndex + CATALOG_ITEMS_PER_PAGE);
+
+      // Paparkan hanya 50 item untuk halaman semasa
+      matchingCards.forEach((card, index) => {
+        if (index >= startIndex && index < endIndex) {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
         }
       });
+
+      // Kemaskini teks status pagination
+      const curEl = document.getElementById('catalogCurrentPage');
+      const totEl = document.getElementById('catalogTotalPages');
+      const rangeEl = document.getElementById('catalogItemRange');
+      const countEl = document.getElementById('catalogTotalCount');
+
+      if (curEl) curEl.innerText = catalogCurrentPage;
+      if (totEl) totEl.innerText = catalogTotalPagesCount;
+      if (rangeEl) rangeEl.innerText = `Memaparkan ${startIndex + 1} - ${endIndex}`;
+      if (countEl) countEl.innerText = totalCount;
+
+      // Kemaskini butang navigasi (Disabled states)
+      const btnFirst = document.getElementById('btnFirstPage');
+      const btnPrev = document.getElementById('btnPrevPage');
+      const btnNext = document.getElementById('btnNextPage');
+      const btnLast = document.getElementById('btnLastPage');
+
+      if (btnFirst) btnFirst.disabled = (catalogCurrentPage === 1);
+      if (btnPrev) btnPrev.disabled = (catalogCurrentPage === 1);
+      if (btnNext) btnNext.disabled = (catalogCurrentPage === catalogTotalPagesCount);
+      if (btnLast) btnLast.disabled = (catalogCurrentPage === catalogTotalPagesCount);
+
+      // Jana butang nombor halaman secara dinamik
+      const pageNumbersContainer = document.getElementById('catalogPageNumbers');
+      if (pageNumbersContainer) {
+        let pagesHtml = '';
+        const startPage = Math.max(1, catalogCurrentPage - 2);
+        const endPage = Math.min(catalogTotalPagesCount, catalogCurrentPage + 2);
+
+        for (let p = startPage; p <= endPage; p++) {
+          const isActive = (p === catalogCurrentPage);
+          pagesHtml += `
+            <button 
+              type="button" 
+              onclick="goToCatalogPage(${p})" 
+              class="px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                isActive 
+                  ? 'bg-amber-600 text-white shadow-2xs' 
+                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'
+              }"
+            >
+              ${p}
+            </button>
+          `;
+        }
+        pageNumbersContainer.innerHTML = pagesHtml;
+      }
+    }
+
+    function goToCatalogPage(page) {
+      if (page < 1 || page > catalogTotalPagesCount || page === catalogCurrentPage) return;
+      catalogCurrentPage = page;
+      renderCatalogPagination();
+      
+      const grid = document.getElementById('itemsGrid');
+      if (grid) {
+        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function changeCatalogPage(delta) {
+      goToCatalogPage(catalogCurrentPage + delta);
     }
 
     async function submitKewps8Request(e) {
