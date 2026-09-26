@@ -49,7 +49,7 @@ $departments = [
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistem Pengurusan Stok KEW.PS-8</title>
+  <title>Sistem Pengurusan Stok KEW.PS-8 | Pejabat KDYMM Tuanku Sultan Kedah</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -77,10 +77,10 @@ $departments = [
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-widest text-amber-400">PEJABAT KDYMM TUANKU SULTAN KEDAH </span>
+              <span class="text-xs font-bold uppercase tracking-widest text-amber-400">PEJABAT KDYMM TUANKU SULTAN KEDAH</span>
             </div>
             <h1 class="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
-              SISTEM PENGURUSAN STOR 
+              SISTEM PERMOHONAN STOK
             </h1>
           </div>
         </div>
@@ -138,21 +138,20 @@ $departments = [
       <div>
         <div class="flex items-center gap-2 mb-1">
           <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
-            Borang KEW.PS-8 Rasmi
+            Pekeliling Perbendaharaan Tatacara Pengurusan Stor
           </span>
-          <span class="text-xs text-slate-300">Pekeliling Perbendaharaan Tatacara Pengurusan Stor</span>
         </div>
-        <h2 class="text-base sm:text-xl font-bold">Permohonan Stok Pejabat Secara Terus ke Stor</h2>
+        <h2 class="text-base sm:text-xl font-bold">Permohonan Stok Pejabat</h2>
         <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
           Pilih kuantiti barang yang diperlukan untuk tugasan rasmi, lengkapkan butiran pemohon, dan serahkan permohonan untuk kelulusan Pegawai Stor.
         </p>
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
-        <a href="print_kewps8.php" target="_blank" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 border border-slate-700 transition">
-          <i data-lucide="printer" class="w-4 h-4 text-amber-400"></i>
-          <span>Borang Kosong</span>
-        </a>
+        <button type="button" onclick="openModal('modalBorang')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 border border-slate-700 transition cursor-pointer shadow-xs">
+          <i data-lucide="files" class="w-4 h-4 text-amber-400"></i>
+          <span>Borang-borang</span>
+        </button>
       </div>
     </div>
 
@@ -506,6 +505,149 @@ $departments = [
             Masuk ke Panel Pentadbir
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Senarai Borang-Borang Rasmi (Download & Cetak) -->
+  <div id="modalBorang" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="min-h-screen px-4 text-center flex items-center justify-center">
+      <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" onclick="closeModal('modalBorang')"></div>
+      
+      <div class="inline-block w-full max-w-2xl p-6 my-8 text-left align-middle bg-white rounded-2xl shadow-2xl relative z-10 text-xs">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold">
+              <i data-lucide="folder-down" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Senarai Borang-Borang Rasmi Aset &amp; Stor</h3>
+              <p class="text-[11px] text-slate-500">Pilih borang untuk dipaparkan, dicetak, atau dimuat turun dalam format rasmi (PDF/A4)</p>
+            </div>
+          </div>
+          <button onclick="closeModal('modalBorang')" class="text-slate-400 hover:text-slate-600 cursor-pointer p-1">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Senarai Borang -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[65vh] overflow-y-auto pr-1">
+          
+          <!-- Borang 1: KEW.PA-9 -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">KEW.PA-9</span>
+                <span class="text-[10px] text-slate-400">AM 2.4 Lampiran A</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs mt-1">Borang Permohonan Pergerakan / Pinjaman Aset Alih</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Permohonan rasmi pinjaman aset alih kerajaan, butiran peminjam, tarikh dan perakuan.</p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Format: A4 Portrait</span>
+              <a href="print_forms.php?form=KEW.PA-9" target="_blank" class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white font-bold rounded-lg text-[10px] inline-flex items-center gap-1 transition">
+                <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Muat Turun
+              </a>
+            </div>
+          </div>
+
+          <!-- Borang 2: KEW.PA-10 -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">KEW.PA-10</span>
+                <span class="text-[10px] text-slate-400">Pemeriksaan</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs mt-1">Laporan Pemeriksaan Harta Modal</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Diisi oleh Pegawai Pemeriksa merangkumi semakan rekod, lokasi, dan keadaan harta modal.</p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Format: A4 Landscape</span>
+              <a href="print_forms.php?form=KEW.PA-10" target="_blank" class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white font-bold rounded-lg text-[10px] inline-flex items-center gap-1 transition">
+                <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Muat Turun
+              </a>
+            </div>
+          </div>
+
+          <!-- Borang 3: KEW.PA-11 -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">KEW.PA-11</span>
+                <span class="text-[10px] text-slate-400">Pemeriksaan</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs mt-1">Laporan Pemeriksaan Inventori</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Laporan semakan kuantiti, lokasi, status daftar dan keadaan semasa inventori pejabat.</p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Format: A4 Landscape</span>
+              <a href="print_forms.php?form=KEW.PA-11" target="_blank" class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white font-bold rounded-lg text-[10px] inline-flex items-center gap-1 transition">
+                <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Muat Turun
+              </a>
+            </div>
+          </div>
+
+          <!-- Borang 4: KEW.PA-20 -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">KEW.PA-20</span>
+                <span class="text-[10px] text-slate-400">Pelupusan</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs mt-1">Laporan Tahunan Pelupusan Aset Alih</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Laporan suku tahunan perolehan asal, hasil pelupusan, jualan, pindahan atau musnah.</p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Format: A4 Landscape</span>
+              <a href="print_forms.php?form=KEW.PA-20" target="_blank" class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white font-bold rounded-lg text-[10px] inline-flex items-center gap-1 transition">
+                <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Muat Turun
+              </a>
+            </div>
+          </div>
+
+          <!-- Borang 5: KEW.PA-32 -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">KEW.PA-32</span>
+                <span class="text-[10px] text-slate-400">Tatatertib</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs mt-1">Laporan Tindakan Surcaj / Tatatertib</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Rekod kehilangan aset, nilai perolehan asal, amaun surcaj dan hukuman tatatertib.</p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Format: A4 Landscape</span>
+              <a href="print_forms.php?form=KEW.PA-32" target="_blank" class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white font-bold rounded-lg text-[10px] inline-flex items-center gap-1 transition">
+                <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Muat Turun
+              </a>
+            </div>
+          </div>
+
+          <!-- Borang 6: KEW.PS-8 -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">KEW.PS-8</span>
+                <span class="text-[10px] text-slate-400">Borang Stor</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs mt-1">Borang Permohonan Stok (Individu Kepada Stor)</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Format standard cetakan borang permohonan stok rasmi (boleh cetak kosong atau terus isi).</p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Format: A4 Portrait</span>
+              <a href="print_kewps8.php" target="_blank" class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white font-bold rounded-lg text-[10px] inline-flex items-center gap-1 transition">
+                <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Muat Turun
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-5 pt-3 border-t border-slate-200 flex justify-end">
+          <button type="button" onclick="closeModal('modalBorang')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition cursor-pointer">
+            Tutup
+          </button>
+        </div>
       </div>
     </div>
   </div>
